@@ -153,7 +153,7 @@ class MySQL_operation:
             except Exception as e:
                 termcolor.cprint("Error using db_name:","red", attrs=['bold'], end=' ')
                 print(e,end='')
-                return _,None
+                return None,None
             
     # Helper function
     def fetch_tables(self,cursor):
