@@ -1,0 +1,13 @@
+pymongo
+pymongo[srv]
+dnspython
+pandas
+numpy
+ensure
+pytest
+termcolor
+mysql-connector-python
+prettytable
+
+
+-e .
