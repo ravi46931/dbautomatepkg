@@ -417,6 +417,15 @@ class Mongo_operation:
         except Exception as e:
             termcolor.cprint("Error updating the data:","red", attrs=['bold'], end=' ')
             print(e) 
+            
+    # Helper function
+    def convert_to_serializable(self, obj):
+        """
+        Convert MongoDB document to JSON serializable format.
+        """
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        return obj
     
     def save_data(self):
         """
