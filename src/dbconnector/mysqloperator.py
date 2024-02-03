@@ -2,10 +2,9 @@ import termcolor
 import mysql.connector
 import time
 from prettytable import PrettyTable
-import pandas as pd
+
 import csv
 import os
-import numpy as np
 
 class MySQL_operation:
     def __init__(self):
@@ -278,8 +277,7 @@ class MySQL_operation:
         except Exception as e:
             termcolor.cprint("Error inserting data:","red", attrs=['bold'], end=' ')
             print(e)
-
-    
+        
     def save_data(self, table_name, db_name=""):
         """
         Save data from a specified table in the connected database to a CSV file.

@@ -418,13 +418,6 @@ class Mongo_operation:
             termcolor.cprint("Error updating the data:","red", attrs=['bold'], end=' ')
             print(e) 
     
-    # Helper function
-    def convert_to_serializable(self, obj):
-        """Convert MongoDB document to JSON serializable format."""
-        if isinstance(obj, ObjectId):
-            return str(obj)
-        return obj
-
     def save_data(self):
         """
         Save data from the MongoDB collection to either a JSON or CSV file.
