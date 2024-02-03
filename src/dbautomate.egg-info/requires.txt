@@ -1,5 +1,13 @@
-ensure==1.0.2
-py-youtube==1.1.7
+pymongo
+pymongo[srv]
+dnspython
+pandas
+numpy
+ensure
+pytest
+termcolor
+mysql-connector-python
+prettytable
 
 [testing]
 pytest>=7.1.3
