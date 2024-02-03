@@ -279,36 +279,7 @@ class MySQL_operation:
             termcolor.cprint("Error inserting data:","red", attrs=['bold'], end=' ')
             print(e)
 
-    def bulk_insert(self, table_name, filepath, db_name=""):
-        """
-        Reads data from a CSV file located at the specified 'filepath',
-        replaces NaN values with None, and inserts the data into the
-        specified database table ('table_name') using the 'insert_data' method.
-
-        Args:
-        - table_name (str): The name of the database table to insert data into.
-        - filepath (str): The path to the CSV file containing the data.
-        - db_name (str, optional): The name of the database (default is an empty string).
-
-        Raises:
-        - Exception: If an error occurs during file execution, an exception is caught
-          and an error message is printed.
-
-        Example Usage:
-        ```python
-        mysql_handler.bulk_insert("your_table", "/path/to/your/data.csv", "your_database")
-        # database is optional
-        ```
-        """
-        try:
-            df = pd.read_csv(filepath)
-            df.replace({np.nan: None}, inplace=True)
-            tuple_list = [tuple(x) for x in df.to_numpy()]
-            self.insert_data(table_name, tuple_list, db_name)
-        except Exception as e:
-            termcolor.cprint("Error with file execution:","red", attrs=['bold'], end=' ')
-            print(e)  
-
+    
     def save_data(self, table_name, db_name=""):
         """
         Save data from a specified table in the connected database to a CSV file.
