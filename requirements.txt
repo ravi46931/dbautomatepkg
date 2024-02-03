@@ -3,6 +3,7 @@ pymongo[srv]
 dnspython
 pandas
 numpy
+ensure
 pytest
 termcolor
 mysql-connector-python

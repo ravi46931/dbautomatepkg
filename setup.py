@@ -27,5 +27,5 @@ setup(
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     # Install requires may be added at here
-    install_requires=['pymongo', 'pymongo[srv]', 'dnspython', 'pandas', 'numpy', 'pytest', 'termcolor', 'mysql-connector-python', 'prettytable'],
+    install_requires=['pymongo', 'pymongo[srv]', 'dnspython','ensure', 'pandas', 'numpy', 'pytest', 'termcolor', 'mysql-connector-python', 'prettytable'],
     )
