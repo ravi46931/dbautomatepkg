@@ -5,6 +5,7 @@ from prettytable import PrettyTable
 import pandas as pd
 import csv
 import os
+import numpy as np
 
 class MySQL_operation:
     def __init__(self):
