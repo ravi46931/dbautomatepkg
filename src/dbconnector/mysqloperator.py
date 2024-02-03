@@ -302,7 +302,7 @@ class MySQL_operation:
         """
         try:
             df = pd.read_csv(filepath)
-            df.replace({np.nan: None}, inplace=True)
+            df=df.replace({np.nan: None})
             tuple_list = [tuple(x) for x in df.to_numpy()]
             self.insert_data(table_name, tuple_list, db_name)
         except Exception as e:
