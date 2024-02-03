@@ -297,8 +297,9 @@ For deleting the entire data from the collection.
 mongo.delete_data()
 ```
 
-Enter *y* if you want to delete the entire data.<br>
-It will delete entire data, Do you want to delete the data?(y/n): *y*<br>
+- Enter *y* if you want to delete the entire data.
+- It will delete entire data, Do you want to delete the data?(y/n): *y*
+
 <span style="color: magenta;">All entry deleted</span>
 
 For delete the data based on the key value.
@@ -364,7 +365,7 @@ print(mysql_handler.insert_data.__doc__)
 
 You can check the latest sources with the command:
 
-```
+```text
 https://github.com/ravi46931/dbconnectorpkg.git
 ```
 
