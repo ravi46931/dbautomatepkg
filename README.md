@@ -1,8 +1,4 @@
-<!-- It will be edited -->
-
-
-
-https://github.com/ravi46931/mongodbconnectorpkg.git
+https://github.com/ravi46931/dbconnectorpkg.git
 # requirements_dev.txt we use for the testing
 It makes it easier to install and manage dependencies for development and testing, separate from the dependencies required for production.
 
