@@ -281,6 +281,7 @@ Enter the filename: q.json<br>
 ### To delete the data of the collection
 
 For deleting the entire data from the collection.
+
 ```python
 mongo.delete_data()
 ```
