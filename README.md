@@ -80,10 +80,10 @@ mysql_handler=MySQL_connector()
 
 ```python
 config = {
-    'host': 'your_mysql_host',
-    'user': 'your_mysql_user',
-    'password': 'your_mysql_password',
-    'database': 'your_database_name'
+'host': 'your_mysql_host',
+'user': 'your_mysql_user',
+'password': 'your_mysql_password',
+'database': 'your_database_name'
 }
 
 conn=mysql_handler.connect_to_mysql(config, attempts=3, delay=2)
