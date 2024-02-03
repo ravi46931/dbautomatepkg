@@ -6,9 +6,6 @@ build-backend = "setuptools.build_meta"
 testpaths = [
     "tests"
     ]
-[project]
-readme="README.md"
-maintainers=[{name="Ravi"}]
 
 [tool.mypy]
 mypy_path = "src"
