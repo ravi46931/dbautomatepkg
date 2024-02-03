@@ -34,9 +34,9 @@
 ## Main Features
 Here are some of the key features of **dbconnector** as follows:<br>
 
- - This **dbconnector** works with **MongoDB** as well as **MySQL** databases.
-  - When working with **MySQL**, it can executes any query, it can insert multiple type of data, it can save the data as well.
-  - When working with **MongoDB**, it creates *database* and *collection*, data can be insert, find, delete, and update as well, the data can be saved locally.
+- This **dbconnector** works with **MongoDB** as well as **MySQL** databases.
+- When working with **MySQL**, it can executes any query, it can insert multiple type of data, it can save the data as well.
+- When working with **MongoDB**, it creates *database* and *collection*, data can be insert, find, delete, and update as well, the data can be saved locally.
 
 ## Where to get it
 
