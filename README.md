@@ -85,7 +85,6 @@ config = {
 'password': 'your_mysql_password',
 'database': 'your_database_name'
 }
-
 conn=mysql_handler.connect_to_mysql(config, attempts=3, delay=2)
 # attempts: Number of times it tries to connect the server in case of failure.
 # delay: time after which next attempt will happen
@@ -151,7 +150,6 @@ You can insert **CSV** file into the table as well.
 ```python
 filepath='path/to/your/data.csv'
 mysql_handler.bulk_insert(table_name, filepath)
-
 # Change the database as well
 filepath='path/to/your/data.csv'
 db_name='books'
@@ -252,7 +250,6 @@ If you want to insert data from the **CSV**, **EXCEL** or **JSON** file, you can
 ```python
 # To insert the data in the current collection
 mongo.bulk_insert(filepath)
-
 # To insert the data in a new or different collection
 collection_name='employee'
 mongo.bulk_insert(filepath, collection_name)
