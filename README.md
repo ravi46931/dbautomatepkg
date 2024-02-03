@@ -290,19 +290,24 @@ Enter the filename: q.json<br>
 <span style="color: lightgreen;">File:</span> <span style="color: blue;">'q.json' </span> <span style="color: lightgreen;">saved successfully....</span>
 
 ### To delete the data of the collection
+
 For deleting the entire data from the collection.
+
 ```python
 mongo.delete_data()
 ```
+
 Enter *y* if you want to delete the entire data.<br>
 It will delete entire data, Do you want to delete the data?(y/n): *y*<br>
 <span style="color: magenta;">All entry deleted</span>
 
 For delete the data based on the key value.
+
 ```python
 key_value={'age':25}
 mongo.delete_data(key_value)
 ```
+
 Enter *one* if you want to delete the one entry else *many* it delete all the entry based on the *key_value*
 Do you want delete the one entry or mutiple entries?(one/many) one
 
@@ -319,6 +324,7 @@ filter_criteria={'age': 25}
 update_data=[{'$set': {'age':24}}]
 mongo.update_data_entry(filter_criteria, update_data)
 ```
+
 Enter *one* if you want to update the single entry.
 
 Do you want single entry update on multiple?(one/many) one<br>
@@ -334,23 +340,32 @@ Do you want single entry update on multiple?(one/many) many<br>
 ```python
 mongo.close_mongo_client()
 ```
+
 After successful closing the client.<br>
 <span style="color: magenta;">MongoDB client closed successfully..</span>
 
 ### Functionality
-For more detail of each of the functions can be reed the docstrings 
+
+For more detail of each of the functions can be reed the docstrings
+
 ```python
 print(mysql_handler.insert_data.__doc__)
 ```
+
 ## Development
 
-### Important links:
+### Important links
+
 - Source code repo: [GitHub Link](https://github.com/ravi46931/dbconnectorpkg)
 - Download Release: [Pypi](https://pypi.org/project/dbautomate/)
 - Bugs/ Feature requests: [GitHub issue Tracker](https://github.com/ravi46931/dbconnectorpkg/issues)
-### Source code:
+
+### Source code
+
 You can check the latest sources with the command:
+
 ```
 https://github.com/ravi46931/dbconnectorpkg.git
 ```
+
 [Go to top](#table-of-contents)
