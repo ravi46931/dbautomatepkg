@@ -10,7 +10,7 @@ Project-URL: Bug Tracker, https://github.com/ravi46931/dbconnectorpkg/issues
 Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
-Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
 Classifier: Operating System :: OS Independent
 Requires-Python: >=3.7
 Requires-Dist: ensure==1.0.2

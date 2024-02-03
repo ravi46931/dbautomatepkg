@@ -2,7 +2,7 @@ pymongo
 pymongo[srv]
 dnspython
 pandas
-numpy==1.24.0
+numpy
 ensure
 pytest
 termcolor
