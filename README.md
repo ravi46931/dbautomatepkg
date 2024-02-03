@@ -28,7 +28,10 @@
   - [To delete the data of the collection](#to-delete-the-data-of-the-collection)
   - [To update the data of the collection](#to-update-the-data-of-the-collection)
   - [To close the mongo client](#to-close-the-mongo-client)
+  - [Functionality](#functionality)
 - [Development](#development)
+  - [Important links](#important-links)
+  - [Source code](#source-code)
 
 
 ## Main Features
@@ -53,6 +56,8 @@ pip install dbconnector
 ```
 
 ## Dependencies
+**dbconnector** supports Python3.8, Python3.9, python3.11
+Installation requires:
 - pymongo
 - pymongo[srv]
 - dnspython
@@ -68,12 +73,14 @@ Let suppose you want to use **MySQL** database.
 
 ### Import the library for MySQL
 
-
+```python
+from dbautomate import mysqloperator
+```
 
 ### Create an instance of MySQL class
 
 ```python
-mysql_handler=MySQL_connector()
+mysql_handler=mysqloperator.MySQL_connector()
 ```
 
 ### Connect to MySQL Server
@@ -193,9 +200,13 @@ Let suppose you want to use **MongoDB** database.
 
 ### Import the library for MongoDB
 
+```python
+from dbautomate import mongodboperator
+```
+
 ### Create an instance of MongoDB class
 ```python
-mongo=MongoDB_connector()
+mongo=mongodboperator.MongoDB_connector()
 ```
 
 ### Get the client of MongoDB
@@ -279,10 +290,8 @@ Enter the filename: q.json<br>
 <span style="color: lightgreen;">File:</span> <span style="color: blue;">'q.json' </span> <span style="color: lightgreen;">saved successfully....</span>
 
 ### To delete the data of the collection
-
 For deleting the entire data from the collection.
-
-```
+```python
 mongo.delete_data()
 ```
 Enter *y* if you want to delete the entire data.<br>
@@ -320,7 +329,6 @@ Enter *many* if you want to update the multiple entries.
 Do you want single entry update on multiple?(one/many) many<br>
 <span style="color: lightgreen;">Updated Successfully (multiple entries)....</span>
 
-
 ### To close the mongo client
 
 ```python
@@ -329,42 +337,20 @@ mongo.close_mongo_client()
 After successful closing the client.<br>
 <span style="color: magenta;">MongoDB client closed successfully..</span>
 
-
 ### Functionality
 For more detail of each of the functions can be reed the docstrings 
 ```python
 print(mysql_handler.insert_data.__doc__)
 ```
-
-
 ## Development
 
-### important links:
-- Source code repo: GitHub Link
-- Download Release: Pypi link
-- Issue Tracker: link of issue of gitHub
+### Important links:
+- Source code repo: [GitHub Link](https://github.com/ravi46931/dbconnectorpkg)
+- Download Release: [Pypi](https://pypi.org/project/dbautomate/)
+- Bugs/ Feature requests: [GitHub issue Tracker](https://github.com/ravi46931/dbconnectorpkg/issues)
 ### Source code:
 You can check the latest sources with the command:
-git clone...........git
-
-
-## Discussion and development:
-Most of the development discussions take place on GitHub on this repo, via **GitHub Issue Tracker**
-
-## Bugs/ Feature requests
-Have you found a bug? Want to see a new feature in **dbconnector**?
-
-## Dependencies
-dbconnector supports Python3.8, Python3.9, python3.10 (edit this line)
-Installation requires: numpy, pandas, pymongo, etc. (write all the libraries)
-
-## development
-**dbconnector** development takes place on Github: link of github
-
-
-Issues Link: https://github.com/ravi46931/dbconnectorpkg/issues
-
-
-
-
+```
+https://github.com/ravi46931/dbconnectorpkg.git
+```
 [Go to top](#table-of-contents)
