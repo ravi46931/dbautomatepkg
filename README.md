@@ -312,10 +312,10 @@ mongo.delete_data(key_value)
 Enter *one* if you want to delete the one entry else *many* it delete all the entry based on the *key_value*
 Do you want delete the one entry or mutiple entries?(one/many) one
 
-Option: *one*<br>
 <span style="color: lightgreen;">Entry deleted successfully</span>
 
-Option: *many*<br>
+If you choose *many* option then the following message will show
+
 <span style="color: lightgreen;">Multiple entries deleted successfully</span>
 
 ### To update the data of the collection
