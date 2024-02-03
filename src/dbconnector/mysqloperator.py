@@ -3,7 +3,7 @@ import mysql.connector
 import time
 from prettytable import PrettyTable
 import pandas as pd
-# import numpy as np
+import numpy as np
 import csv
 import os
 
