@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-package_name='dbconnector'
+package_name='dbautomate'
 
 list_of_files = [
    ".github/workflows/ci.yaml",
