@@ -3,7 +3,7 @@ import mysql.connector
 import time
 from prettytable import PrettyTable
 import pandas as pd
-import numpy as np
+
 import csv
 import os
 
@@ -302,7 +302,7 @@ class MySQL_operation:
         """
         try:
             df = pd.read_csv(filepath)
-            # df=df.replace({np.nan: None})
+            df=df.replace({float('nan'): None})
             tuple_list = [tuple(x) for x in df.to_numpy()]
             self.insert_data(table_name, tuple_list, db_name)
         except Exception as e:
