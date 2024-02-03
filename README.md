@@ -279,6 +279,7 @@ Enter the filename: q.json<br>
 <span style="color: lightgreen;">File:</span> <span style="color: blue;">'q.json' </span> <span style="color: lightgreen;">saved successfully....</span>
 
 ### To delete the data of the collection
+
 For deleting the entire data from the collection.
 ```python
 mongo.delete_data()
