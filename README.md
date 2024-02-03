@@ -133,8 +133,8 @@ Insert single entry or multiple entries.
 ```python
 table_name='cats'
 values=[
-  ('Mena',5),
-  ('Kena',11)
+('Mena',5),
+('Kena',11)
 ]
 mysql_handler.insert_data(table_name, values)
 ```
