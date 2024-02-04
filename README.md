@@ -87,18 +87,20 @@ mysql_handler=mysqloperator.MySQL_connector()
 
 ```python
 config = {
-'host': 'your_mysql_host',
-'user': 'your_mysql_user',
-'password': 'your_mysql_password',
-'database': 'your_database_name'
-}
+        'host': 'your_mysql_host',
+        'user': 'your_mysql_user',
+        'password': 'your_mysql_password',
+        'database': 'your_database_name'
+  }
 conn=mysql_handler.connect_to_mysql(config, attempts=3, delay=2)
 # attempts: Number of times it tries to connect the server in case of failure.
 # delay: time after which next attempt will happen
 # These two parameters are optional
 ```
 For successful connection it gives following message:<br>
-<span style="color: lightgreen;"> Connected successfully....
+```html
+<span style="color: lightgreen;"> Connected successfully....</span>
+```
 
 ### Check the MySQL handler object
 ```python

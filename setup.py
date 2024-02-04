@@ -19,7 +19,6 @@ setup(
     author_email=AUTHOR_EMAIL,
     description="A Python package for connecting with database.",
     long_description=long_description,
-    # long_description_content="text/markdown",
     long_description_content_type='text/markdown',
     url=f"https://github.com/{AUTHOR_USER_NAME}/{REPO_NAME}",
     project_urls={
