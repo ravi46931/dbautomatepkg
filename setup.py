@@ -7,7 +7,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
     
 
 ## Required files
-__version__ = "0.5.7"
+__version__ = "0.5.6"
 REPO_NAME = "dbautomatepkg"
 PKG_NAME= "dbautomate" # package will be visible with this name in PyPI
 AUTHOR_USER_NAME = "ravi46931" # GitHub user name
