@@ -100,9 +100,7 @@ conn=mysql_handler.connect_to_mysql(config, attempts=3, delay=2)
 ```
 For successful connection it gives following message:<br>
 
-```HTML
 <span style="color: lightgreen;"> Connected successfully....</span>
-```
 
 ### Check the MySQL handler object
 ```python

@@ -2,12 +2,12 @@ from setuptools import setup, find_packages
 from typing import List
 
 with open('README.md', 'r', encoding='utf-8') as f:
-    next(f)
+    next(f) # Ignoring first line
     long_description = f.read()   
     
 
 ## Required files
-__version__ = "0.5.5"
+__version__ = "0.1.0"
 REPO_NAME = "dbautomatepkg"
 PKG_NAME= "dbautomate" # package will be visible with this name in PyPI
 AUTHOR_USER_NAME = "ravi46931" # GitHub user name
