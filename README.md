@@ -1,6 +1,6 @@
 # Project Description
 ## About
-**dbconnector** is a Python package that provides flexible, interactive and expressive data manipulation with databases. It designed to make working with "relational" and "non-relational" databases seamless, interactive and efficient, provides a flexible and scalable solution for diverse data storage and retrievel needs.
+**dbautomate** is a Python package that provides flexible, interactive and expressive data manipulation with databases. It designed to make working with "relational" and "non-relational" databases seamless, interactive and efficient, provides a flexible and scalable solution for diverse data storage and retrievel needs.
 
 ## Table of Contents
 
@@ -35,16 +35,16 @@
 
 
 ## Main Features
-Here are some of the key features of **dbconnector** as follows:<br>
+Here are some of the key features of **dbautomate** as follows:<br>
 
-- This **dbconnector** works with **MongoDB** as well as **MySQL** databases.
+- This **dbautomate** works with **MongoDB** as well as **MySQL** databases.
 - When working with **MySQL**, it can executes any query, it can insert multiple type of data, it can save the data as well.
 - When working with **MongoDB**, it creates *database* and *collection*, data can be insert, find, delete, and update as well, the data can be saved locally.
 
 ## Where to get it
 
 The source code is currently hosted on **GitHub** at: 
-https://github.com/ravi46931/dbconnectorpkg
+https://github.com/ravi46931/dbautomatepkg
 
 
 ## Installation
@@ -52,11 +52,12 @@ https://github.com/ravi46931/dbconnectorpkg
 Install via pip:
 ```
 # PyPI
-pip install dbconnector
+pip install dbautomate
 ```
 
 ## Dependencies
-**dbconnector** supports Python3.8, Python3.9, python3.11
+**dbautomate** supports Python3.8, Python3.9, python3.11.
+
 Installation requires:
 - pymongo
 - pymongo[srv]
@@ -99,17 +100,17 @@ conn=mysql_handler.connect_to_mysql(config, attempts=3, delay=2)
 ```
 For successful connection it gives following message:<br>
 
-<html>
+```HTML
 <span style="color: lightgreen;"> Connected successfully....</span>
-</html>
+```
 
 ### Check the MySQL handler object
 ```python
 print(mysql_handler)
 ```
-Output:<br>
+**Output**:<br>
 
-MySQLHandler Object -<br>
+**MySQLHandler Object** -<br>
 Config: 
 <span style="color: blue;">{'host': 'your_mysql_host', 'user': 'your_mysql_user', 'password': 'your_mysql_password', 'database': 'your_database_name'}</span><br>
 Connected: <span style="color: blue;">True</span> <br>
@@ -143,8 +144,8 @@ Insert single entry or multiple entries.
 ```python
 table_name='cats'
 values=[
-('Mena',5),
-('Kena',11)
+  ('Mena',5),
+  ('Kena',11)
 ]
 mysql_handler.insert_data(table_name, values)
 ```
@@ -360,16 +361,16 @@ print(mysql_handler.insert_data.__doc__)
 
 ### Important links
 
-- Source code repo: [GitHub Link](https://github.com/ravi46931/dbconnectorpkg)
+- Source code repo: [GitHub Link](https://github.com/ravi46931/dbautomatepkg)
 - Download Release: [Pypi](https://pypi.org/project/dbautomate/)
-- Bugs/ Feature requests: [GitHub issue Tracker](https://github.com/ravi46931/dbconnectorpkg/issues)
+- Bugs/ Feature requests: [GitHub issue Tracker](https://github.com/ravi46931/dbautomatepkg/issues)
 
 ### Source code
 
 You can check the latest sources with the command:
 
 ```text
-https://github.com/ravi46931/dbconnectorpkg.git
+https://github.com/ravi46931/dbautomatepkg.git
 ```
 
 [Go to top](#table-of-contents)
