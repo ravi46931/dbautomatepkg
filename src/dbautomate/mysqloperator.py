@@ -1,26 +1,27 @@
-import termcolor
-import mysql.connector
-import time
-from prettytable import PrettyTable
-import pandas as pd
-
-import csv
 import os
+import csv
+import time
+import termcolor
+import pandas as pd
+import mysql.connector
+from prettytable import PrettyTable
 
 class MySQL_operation:
     def __init__(self):
-        self.config=None
+        self.config = None
         self.connection = None
         self.cursor = None
-        
+
     def __str__(self):
-        termcolor.cprint("MySQLHandler Object -","dark_grey", attrs=['bold'], end='\n')
-        termcolor.cprint("Config:",attrs=['bold'], end=' ')
-        termcolor.cprint(f"{self.config}",'blue',attrs=['bold'], end='\n')
-        termcolor.cprint("Connected:",attrs=['bold'], end=' ')
-        termcolor.cprint(f"{self.connection is not None}",'blue',attrs=['bold'], end='\n')
+        termcolor.cprint("MySQLHandler Object -", "dark_grey", attrs=["bold"], end="\n")
+        termcolor.cprint("Config:", attrs=["bold"], end=" ")
+        termcolor.cprint(f"{self.config}", "blue", attrs=["bold"], end="\n")
+        termcolor.cprint("Connected:", attrs=["bold"], end=" ")
+        termcolor.cprint(
+            f"{self.connection is not None}", "blue", attrs=["bold"], end="\n"
+        )
         return ""
-        
+
     def connect_to_mysql(self, config, attempts=3, delay=2):
         """
         Attempt to establish a connection to a MySQL database.
@@ -37,7 +38,7 @@ class MySQL_operation:
         - mysql.connector.Error: If a MySQL-specific error occurs during connection.
         - IOError: If an I/O error occurs during connection.
         - Exception: For general exceptions during connection.
-        
+
         Example Usage:
         ```python
         config = {
@@ -51,42 +52,49 @@ class MySQL_operation:
         connection = mysql_handler.connect_to_mysql(config, attempts=3, delay=2)
         ```
         """
-        self.config=config
+        self.config = config
         attempt = 1
         # Implement a reconnection routine
         while attempt < attempts + 1:
             try:
-                no_dict=""
-                if type(self.config)!= dict:
-                    no_dict="Not dict type"
-                self.connection=mysql.connector.connect(**self.config)
-                self.cursor = self.connection.cursor()                 
-                termcolor.cprint("Connected successfully....","green", attrs=['bold'], end='\n')
-                return self.connection  
+                no_dict = ""
+                if type(self.config) != dict:
+                    no_dict = "Not dict type"
+                self.connection = mysql.connector.connect(**self.config)
+                self.cursor = self.connection.cursor()
+                termcolor.cprint(
+                    "Connected successfully....", "green", attrs=["bold"], end="\n"
+                )
+                return self.connection
             except (mysql.connector.Error, IOError, Exception) as e:
-                if (attempts is attempt):
+                if attempts is attempt:
                     # Attempts to reconnect failed; returning None
-                    termcolor.cprint("Failed to connect, exiting without a connection:","red", attrs=['bold'], end=' ')
+                    termcolor.cprint(
+                        "Failed to connect, exiting without a connection:",
+                        "red",
+                        attrs=["bold"],
+                        end=" ",
+                    )
                     print(e, no_dict)
                     return None
                 # progressive reconnect delay
-                time.sleep(delay ** attempt)
+                time.sleep(delay**attempt)
                 attempt += 1
         return None
-        
+
     def execute_query(self, query):
         """
         Execute a SQL query and display displays the results in a formatted table. Or simply execute query only.
-        
+
         Parameters:
         - query (str): The SQL query to be executed.
-        
+
         Returns:
         None
-        
+
         Raises:
         - Exception: If an error occurs during the query execution or result retrieval.
-        
+
         Example Usage:
         ```python
         # Assuming an instance of your class is created, let's call it 'mysql_handler'
@@ -98,66 +106,75 @@ class MySQL_operation:
         ```
         """
         try:
-            self.cursor.execute(query) 
+            self.cursor.execute(query)
             try:
                 rows = self.cursor.fetchall()
                 column_names = [desc[0] for desc in self.cursor.description]
                 # Display results using PrettyTable
                 if rows:
                     table = PrettyTable(column_names)
-                    table.align = 'l'
+                    table.align = "l"
                     for row in rows:
                         table.add_row(row)
-                    termcolor.cprint("Query executed successfully....","green", attrs=['bold'], end='\n')
+                    termcolor.cprint(
+                        "Query executed successfully....",
+                        "green",
+                        attrs=["bold"],
+                        end="\n",
+                    )
                     print(table)
                 else:
-                    termcolor.cprint("No results found.","red", attrs=['bold'], end=' ')
+                    termcolor.cprint(
+                        "No results found.", "red", attrs=["bold"], end=" "
+                    )
 
             except Exception as e:
-                termcolor.cprint("Query:","green", attrs=['bold'], end=' ')
-                termcolor.cprint(f"\"{query}\"","blue", attrs=['bold'], end=' ')
-                termcolor.cprint("executed successfully.","green", attrs=['bold'], end=' ')
+                termcolor.cprint("Query:", "green", attrs=["bold"], end=" ")
+                termcolor.cprint(f'"{query}"', "blue", attrs=["bold"], end=" ")
+                termcolor.cprint(
+                    "executed successfully.", "green", attrs=["bold"], end=" "
+                )
                 return
         except Exception as e:
-            termcolor.cprint("Error executing query:","red", attrs=['bold'], end=' ')
+            termcolor.cprint("Error executing query:", "red", attrs=["bold"], end=" ")
             print(e)
-    
+
     # Helper function
-    def fetch_db(self,db_name):
+    def fetch_db(self, db_name):
         """
         Set the active database for the current connection and retrieve the current database.
 
         Parameters:
         - db_name (str): The name of the database to use. If an empty string is provided,
           the method retrieves the current active database.
-        
+
         Returns:
         - cursor (object): A cursor object connected to the selected database.
         - db_name (str): The name of the database that was fetched or switched to.
-        
+
         Raises:
         - Exception: If an error occurs during the database selection or retrieval.
         """
-        if db_name=="":
-            cursor=self.connection.cursor()
-            query_select="select database()"
+        if db_name == "":
+            cursor = self.connection.cursor()
+            query_select = "select database()"
             cursor.execute(query_select)
-            db=cursor.fetchall()
-            db_name=db[0][0]
-            return cursor,db_name
+            db = cursor.fetchall()
+            db_name = db[0][0]
+            return cursor, db_name
         else:
             try:
-                cursor=self.connection.cursor()
-                query_db=f"use {db_name}"
+                cursor = self.connection.cursor()
+                query_db = f"use {db_name}"
                 cursor.execute(query_db)
-                return cursor,db_name
+                return cursor, db_name
             except Exception as e:
-                termcolor.cprint("Error using db_name:","red", attrs=['bold'], end=' ')
-                print(e,end='')
-                return None,None
-            
+                termcolor.cprint("Error using db_name:", "red", attrs=["bold"], end=" ")
+                print(e, end="")
+                return None, None
+
     # Helper function
-    def fetch_tables(self,cursor):
+    def fetch_tables(self, cursor):
         """
         Retrieve a list of table names in the connected database using the provided database cursor.
 
@@ -167,14 +184,13 @@ class MySQL_operation:
         Returns:
         - list: A list containing the names of the tables in the connected database.
         """
-        query_tables='show tables'
+        query_tables = "show tables"
         cursor.execute(query_tables)
-        tables=cursor.fetchall()
-        list_table=[table[0]  for table in tables]
+        tables = cursor.fetchall()
+        list_table = [table[0] for table in tables]
         return list_table
-    
-    
-    def insert_data(self, table_name, values, db_name =""):
+
+    def insert_data(self, table_name, values, db_name=""):
         """
         Insert data into a specified table in the connected database.
 
@@ -188,12 +204,12 @@ class MySQL_operation:
 
         Raises:
         - Exception: If an error occurs during the data insertion process.
-        
+
         Example Usage:
         ```python
         # Assuming an instance of your class is created, let's call it 'mysql_handler'
         # Assuming you have an established database connection
-        
+
         # Insert single entry into the 'example_table' in the active database
         values_single_entry = (1, 'John Doe', 25)
         mysql_handler.insert_data("example_table", values_single_entry)
@@ -208,77 +224,92 @@ class MySQL_operation:
         ```
         """
         # Fetch the database and cursor
-        cursor,db_name=self.fetch_db(db_name)
-        if db_name==None:
+        cursor, db_name = self.fetch_db(db_name)
+        if db_name == None:
             return
         else:
             print(f"Your database: '{db_name}'")
 
-        try: 
+        try:
             # Fetch the tables of the database
-            list_table=self.fetch_tables(cursor)
-            
+            list_table = self.fetch_tables(cursor)
+
             if table_name in list_table:
-                termcolor.cprint("Your table:","green", attrs=['bold'], end=' ')
-                termcolor.cprint(f"'{table_name}'", "blue", attrs=['bold'], end=' ')
-                termcolor.cprint(", present in the database", end=' ')
-                termcolor.cprint(f"'{db_name}'", "blue", attrs=['bold'], end='\n')
+                termcolor.cprint("Your table:", "green", attrs=["bold"], end=" ")
+                termcolor.cprint(f"'{table_name}'", "blue", attrs=["bold"], end=" ")
+                termcolor.cprint(", present in the database", end=" ")
+                termcolor.cprint(f"'{db_name}'", "blue", attrs=["bold"], end="\n")
 
             else:
-                termcolor.cprint("Table not found:", "red", attrs=['bold'], end=' ')
+                termcolor.cprint("Table not found:", "red", attrs=["bold"], end=" ")
                 print(f"'{table_name}' is not present in the database '{db_name}'.")
-                print(f"Select one of the following tables ", end='')
-                termcolor.cprint(f"{list_table}", attrs=['bold'], end=' ')
+                print(f"Select one of the following tables ", end="")
+                termcolor.cprint(f"{list_table}", attrs=["bold"], end=" ")
                 print("or create new table or use another database.")
                 return
         except Exception as e:
-            termcolor.cprint("Error fetching the tables:","red", attrs=['bold'], end=' ')
+            termcolor.cprint(
+                "Error fetching the tables:", "red", attrs=["bold"], end=" "
+            )
             print(e)
             return
 
         # Fetch the columns of table
-        try:   
-            query_table=f"select * from {table_name}"
+        try:
+            query_table = f"select * from {table_name}"
             cursor.execute(query_table)
             cursor.fetchall()
-            desc=cursor.description
-            columns=[t[0] for t in desc]
+            desc = cursor.description
+            columns = [t[0] for t in desc]
 
-            flag=input("Enter yes if the first value of argument is 'id' and you have not provided: ").lower()
-            if flag=='y' or flag=='yes':
-                columns=columns[1:]
-            d=str(tuple(columns))
-            column_table=d.replace('\'','')
+            flag = input(
+                "Enter yes if the first value of argument is 'id' and you have not provided: "
+            ).lower()
+            if flag == "y" or flag == "yes":
+                columns = columns[1:]
+            d = str(tuple(columns))
+            column_table = d.replace("'", "")
 
         except Exception as e:
-            termcolor.cprint("Error fetching column names:","red", attrs=['bold'], end=' ')
+            termcolor.cprint(
+                "Error fetching column names:", "red", attrs=["bold"], end=" "
+            )
             print(e)
             return
 
         # Write query and insert the data
-        query= f"INSERT INTO {table_name} {column_table} VALUES ({', '.join('%s' for _ in columns)})"
+        query = f"INSERT INTO {table_name} {column_table} VALUES ({', '.join('%s' for _ in columns)})"
         try:
-            tmp=0
-            while(tmp<3):
-                flag_insert=input("Are you inserting more than one entry?(y/n) ").lower()
-                if flag_insert=='y':
+            tmp = 0
+            while tmp < 3:
+                flag_insert = input(
+                    "Are you inserting more than one entry?(y/n) "
+                ).lower()
+                if flag_insert == "y":
                     cursor.executemany(query, values)
                     break
-                elif flag_insert=='n':    
+                elif flag_insert == "n":
                     cursor.execute(query, values)
                     break
                 else:
                     print("Incorrect option..")
-                tmp+=1
-            if tmp==3:
-                termcolor.cprint("Program exited without inserting","magenta", attrs=['bold'], end=' ')
+                tmp += 1
+            if tmp == 3:
+                termcolor.cprint(
+                    "Program exited without inserting",
+                    "magenta",
+                    attrs=["bold"],
+                    end=" ",
+                )
                 return
             self.connection.commit()
-            termcolor.cprint("Inserted successfully....", 'green', attrs=['bold'], end=' ')
+            termcolor.cprint(
+                "Inserted successfully....", "green", attrs=["bold"], end=" "
+            )
         except Exception as e:
-            termcolor.cprint("Error inserting data:","red", attrs=['bold'], end=' ')
+            termcolor.cprint("Error inserting data:", "red", attrs=["bold"], end=" ")
             print(e)
-            
+
     def bulk_insert(self, table_name, filepath, db_name=""):
         """
         Reads data from a CSV file located at the specified 'filepath',
@@ -302,13 +333,15 @@ class MySQL_operation:
         """
         try:
             df = pd.read_csv(filepath)
-            df=df.replace({float('nan'): None})
+            df = df.replace({float("nan"): None})
             tuple_list = [tuple(x) for x in df.to_numpy()]
             self.insert_data(table_name, tuple_list, db_name)
         except Exception as e:
-            termcolor.cprint("Error with file execution:","red", attrs=['bold'], end=' ')
-            print(e)   
-       
+            termcolor.cprint(
+                "Error with file execution:", "red", attrs=["bold"], end=" "
+            )
+            print(e)
+
     def save_data(self, table_name, db_name=""):
         """
         Save data from a specified table in the connected database to a CSV file.
@@ -322,7 +355,7 @@ class MySQL_operation:
 
         Raises:
         - Exception: If an error occurs during the data retrieval or CSV file creation process.
-        
+
         Example Usage:
         ```python
         # Assuming an instance of your class is created, let's call it 'mysql_handler'
@@ -333,25 +366,27 @@ class MySQL_operation:
 
         # Save data from the 'another_table' in the specified database to a CSV file
         mysql_handler.save_data("another_table", db_name="my_database")
-        ```       
+        ```
         """
-        cursor,db_name=self.fetch_db(db_name)
-        if db_name==None:
+        cursor, db_name = self.fetch_db(db_name)
+        if db_name == None:
             return
 
-        try: 
-            list_table=self.fetch_tables(cursor)
-            
+        try:
+            list_table = self.fetch_tables(cursor)
+
             if table_name not in list_table:
-                termcolor.cprint("Table not found:", "red", attrs=['bold'], end=' ')
+                termcolor.cprint("Table not found:", "red", attrs=["bold"], end=" ")
                 print(f"'{table_name}' is not present in the database '{db_name}'.")
-                print(f"Select one of the following tables ", end='')
-                termcolor.cprint(f"{list_table}", attrs=['bold'], end=' ')
+                print(f"Select one of the following tables ", end="")
+                termcolor.cprint(f"{list_table}", attrs=["bold"], end=" ")
                 print("or create new table or use another database.")
                 return
 
         except Exception as e:
-            termcolor.cprint("Error fetching the tables:","red", attrs=['bold'], end=' ')
+            termcolor.cprint(
+                "Error fetching the tables:", "red", attrs=["bold"], end=" "
+            )
             print(e)
             return
 
@@ -360,22 +395,22 @@ class MySQL_operation:
             cursor.execute(query)
             rows = cursor.fetchall()
             column_names = [desc[0] for desc in cursor.description]
-            csv_file_name =input("Enter the filename: ")
+            csv_file_name = input("Enter the filename: ")
             # Create the full path for the output CSV file
-            file_path=os.path.join(os.getcwd(), csv_file_name)
-            with open(file_path, 'w', newline='') as csv_file:
+            file_path = os.path.join(os.getcwd(), csv_file_name)
+            with open(file_path, "w", newline="") as csv_file:
                 csv_writer = csv.writer(csv_file)
                 csv_writer.writerow(column_names)
                 csv_writer.writerows(rows)
             if os.path.exists(csv_file_name):
-                termcolor.cprint("File:", 'green', attrs=['bold'], end=' ')
-                termcolor.cprint(f"'{csv_file_name}'", 'blue', attrs=['bold'], end=' ')
-                termcolor.cprint("saved successfully....", 'green', attrs=['bold'])
+                termcolor.cprint("File:", "green", attrs=["bold"], end=" ")
+                termcolor.cprint(f"'{csv_file_name}'", "blue", attrs=["bold"], end=" ")
+                termcolor.cprint("saved successfully....", "green", attrs=["bold"])
 
         except Exception as e:
-            termcolor.cprint("Error saving data:","red", attrs=['bold'], end=' ')
+            termcolor.cprint("Error saving data:", "red", attrs=["bold"], end=" ")
             print(e)
-            
+
     def close_connection(self):
         """
         Close the active MySQL database connection.
@@ -388,7 +423,7 @@ class MySQL_operation:
 
         Returns:
         None
-        
+
         Example Usage:
         ```python
         # Assuming an instance of your class is created, let's call it 'mysql_handler'
@@ -401,8 +436,14 @@ class MySQL_operation:
         if self.connection:
             self.cursor.close()
             self.connection.close()
-            termcolor.cprint("MySQL connection closed.","dark_grey", attrs=['bold'], end=' ')
-            self.connection=None
+            termcolor.cprint(
+                "MySQL connection closed.", "dark_grey", attrs=["bold"], end=" "
+            )
+            self.connection = None
         else:
-            termcolor.cprint("MySQL connection is not active, may be connection is already closed.","magenta", attrs=['bold'], end=' ')
-         
+            termcolor.cprint(
+                "MySQL connection is not active, may be connection is already closed.",
+                "magenta",
+                attrs=["bold"],
+                end=" ",
+            )

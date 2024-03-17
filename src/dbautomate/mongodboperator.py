@@ -1,89 +1,104 @@
-import pymongo
-from pymongo import MongoClient
-from pymongo.mongo_client import MongoClient
-import termcolor
-
-from pymongo.database import Database 
-from pymongo.collection import Collection
-
-from bson import SON, raw_bson
-from collections.abc import MutableMapping
-
-import pandas as pd
-import json
-from bson import ObjectId
 import os
+import json
+import pymongo
+import termcolor
+import pandas as pd
+from bson import ObjectId
+from bson import SON, raw_bson
+from pymongo import MongoClient
+from pymongo.database import Database
+from pymongo.collection import Collection
+from collections.abc import MutableMapping
+from pymongo.mongo_client import MongoClient
+
 
 class Mongo_operation:
     def __init__(self):
-        self.uri=None
-        self.client=None
-        self.database=None
-        self.collection=None
-        self.is_closed=True
-        
+        self.uri = None
+        self.client = None
+        self.database = None
+        self.collection = None
+        self.is_closed = True
+
     def __str__(self):
-        termcolor.cprint("MongoDB_CRUD Object -","dark_grey", attrs=['bold'], end='\n')
-        termcolor.cprint("Connection String:",'dark_grey',attrs=['bold'], end=' ')
-        termcolor.cprint(f"{self.uri}",'blue',attrs=['bold'], end='\n')
-        termcolor.cprint("Database:",'dark_grey',attrs=['bold'], end=' ')
-        termcolor.cprint(f"{None if self.database==None else self.database.name}",'blue',attrs=['bold'], end='\n')
-        termcolor.cprint("Collection:",'dark_grey',attrs=['bold'], end=' ')
-        termcolor.cprint(f"{None if self.collection==None else self.collection.name}",'blue',attrs=['bold'], end='\n')   
-        termcolor.cprint("MongoClient:",'dark_grey',attrs=['bold'], end=' ')
-        termcolor.cprint(f"{'Closed' if self.is_closed else 'Open'}",'blue',attrs=['bold'], end='\n')
-        return ""     
-        
+        termcolor.cprint("MongoDB_CRUD Object -", "dark_grey", attrs=["bold"], end="\n")
+        termcolor.cprint("Connection String:", "dark_grey", attrs=["bold"], end=" ")
+        termcolor.cprint(f"{self.uri}", "blue", attrs=["bold"], end="\n")
+        termcolor.cprint("Database:", "dark_grey", attrs=["bold"], end=" ")
+        termcolor.cprint(
+            f"{None if self.database==None else self.database.name}",
+            "blue",
+            attrs=["bold"],
+            end="\n",
+        )
+        termcolor.cprint("Collection:", "dark_grey", attrs=["bold"], end=" ")
+        termcolor.cprint(
+            f"{None if self.collection==None else self.collection.name}",
+            "blue",
+            attrs=["bold"],
+            end="\n",
+        )
+        termcolor.cprint("MongoClient:", "dark_grey", attrs=["bold"], end=" ")
+        termcolor.cprint(
+            f"{'Closed' if self.is_closed else 'Open'}",
+            "blue",
+            attrs=["bold"],
+            end="\n",
+        )
+        return ""
+
     def get_mongo_client(self, uri):
         """
         Establishes a connection to MongoDB using the provided URI.
-        
+
         Args:
         uri (str): MongoDB connection string.
-        
+
         Returns:
         MongoClient: A MongoDB client object if the connection is successful.
 
         Raises:
         Exception: If there is an error during the connection process, an exception is raised.
-        
+
         Example Usage:
         ```python
         client = my_object.get_mongo_client(uri)
         ```
         """
         try:
-            self.uri=uri
-            
+            self.uri = uri
+
             # Attempt to establish a connection to MongoDB
-            client=MongoClient(self.uri)
-            
+            client = MongoClient(self.uri)
+
             # Check the connection by issuing a command to the 'admin' database
-            client.admin.command('ismaster')
-            
+            client.admin.command("ismaster")
+
             # Retrieve server information to further validate the connection
             client.server_info()
-            
+
             # Check if the returned object is an instance of MongoClient
-            if isinstance(client, MongoClient)==False:
-                self.client=None
-                raise Exception('The object is not a MongoDB client')
-            
+            if isinstance(client, MongoClient) == False:
+                self.client = None
+                raise Exception("The object is not a MongoDB client")
+
             # Set class attributes for the connected client
-            self.client=client
-            self.is_closed=False
-            
+            self.client = client
+            self.is_closed = False
+
             # Print the success message
-            termcolor.cprint("Connected to MongoDB Successfully....",'green',attrs=['bold'])
-            
+            termcolor.cprint(
+                "Connected to MongoDB Successfully....", "green", attrs=["bold"]
+            )
+
             # Return the connected client
             return client
-        
+
         except Exception as e:
             # Exception handling
-            termcolor.cprint("Error during connection:","red", attrs=['bold'], end=' ')
-            print(e)        
-        
+            termcolor.cprint("Error during connection:", "red", attrs=["bold"], end=" ")
+            print(e)
+
     def create_database(self, database_name):
         """
         Creates a MongoDB database with the specified name.
@@ -96,27 +111,31 @@ class Mongo_operation:
 
         Raises:
         Exception: If there is an error during the database creation process, an exception is raised.
-        
+
         Example Usage:
         ```python
         my_object.create_database("my_database")
         ```
         """
         try:
-            client=self.client
-            
+            client = self.client
+
             # Attempt to create a new database with the provided name
-            self.database=client[database_name]
-            
-            if isinstance(self.database, Database)==False:
-                self.database=None
+            self.database = client[database_name]
+
+            if isinstance(self.database, Database) == False:
+                self.database = None
                 raise Exception("The object is not a database")
-            termcolor.cprint("Database created successfully....",'green',attrs=['bold'])
+            termcolor.cprint(
+                "Database created successfully....", "green", attrs=["bold"]
+            )
             return None
         except Exception as e:
-            termcolor.cprint("Error creating the database:","red", attrs=['bold'], end=' ')
-            print(e) 
-            
+            termcolor.cprint(
+                "Error creating the database:", "red", attrs=["bold"], end=" "
+            )
+            print(e)
+
     def create_collection(self, collection_name):
         """
         Creates a MongoDB collection with the specified name within the current database.
@@ -129,29 +148,33 @@ class Mongo_operation:
 
         Raises:
         Exception: If there is an error during the collection creation process, an exception is raised.
-        
+
         Example Usage:
         ```python
         # Assume that you have already get the MongoClient and create_collection
-        
+
         collection=my_object.create_collection("my_database")
         ```
         """
 
         try:
             # Attempt to create a new collection with the provided name within the current database
-            self.collection=self.database[collection_name]
-            
-            if isinstance(self.collection, Collection)==False:
-                self.collection=None
+            self.collection = self.database[collection_name]
+
+            if isinstance(self.collection, Collection) == False:
+                self.collection = None
                 raise Exception("The object is not a collection")
-            termcolor.cprint("Collection created successfully....",'green',attrs=['bold'])
+            termcolor.cprint(
+                "Collection created successfully....", "green", attrs=["bold"]
+            )
             return self.collection
         except Exception as e:
-            termcolor.cprint("Error creating the collection:","red", attrs=['bold'], end=' ')
-            print(e)         
-            
-    def insert_data(self, data):  
+            termcolor.cprint(
+                "Error creating the collection:", "red", attrs=["bold"], end=" "
+            )
+            print(e)
+
+    def insert_data(self, data):
         """
         Inserts data into the MongoDB collection.
 
@@ -165,7 +188,7 @@ class Mongo_operation:
         Raises:
         Exception: If there is an error during the insertion process, an exception is raised,
                    and an error message is printed.
-                   
+
         Example Usage:
         ```python
         data={"name": "abc", "age": 27, "city": "New York"}
@@ -174,33 +197,45 @@ class Mongo_operation:
         """
         try:
             if type(data) != list:
-                if not isinstance(data, (dict, SON, raw_bson.RawBSONDocument, MutableMapping)):
+                if not isinstance(
+                    data, (dict, SON, raw_bson.RawBSONDocument, MutableMapping)
+                ):
                     raise Exception("Data is not in the correct format")
-                    
+
             # Insert the one data entry
             if type(data) == dict:
                 self.collection.insert_one(data)
-                termcolor.cprint("Inserted successfully(Single entry)....",'green',attrs=['bold'])
-                
-            # Insert the multiple entries   
-            elif type(data) ==list:
+                termcolor.cprint(
+                    "Inserted successfully(Single entry)....", "green", attrs=["bold"]
+                )
+
+            # Insert the multiple entries
+            elif type(data) == list:
                 # Verify all the elements of the list as a dict type
-                for i,entry in enumerate(data):
+                for i, entry in enumerate(data):
                     if type(entry) != dict:
-                        dtype=str(type(entry)).split("'")[1]
-                        raise Exception(f"Data is not in correct format. \nData type at index {i} of list is '{dtype}', but the entries inside the 'list' should be 'dict' type.")
+                        dtype = str(type(entry)).split("'")[1]
+                        raise Exception(
+                            f"Data is not in correct format. \nData type at index {i} of list is '{dtype}', but the entries inside the 'list' should be 'dict' type."
+                        )
                 self.collection.insert_many(data)
-                termcolor.cprint("Data inserted successfully....",'green',attrs=['bold'])
-            
+                termcolor.cprint(
+                    "Data inserted successfully....", "green", attrs=["bold"]
+                )
+
             # If the data is not in correct format
             else:
-                dtype=str(type(data)).split("'")[1]
-                raise Exception(f"Data is not in correct format. \nThe data type of argument 'data' is '{dtype}', but argument 'data' should pass as 'list' or 'dict' type.")
+                dtype = str(type(data)).split("'")[1]
+                raise Exception(
+                    f"Data is not in correct format. \nThe data type of argument 'data' is '{dtype}', but argument 'data' should pass as 'list' or 'dict' type."
+                )
         except Exception as e:
-            termcolor.cprint("Error inserting the entry:","red", attrs=['bold'], end=' ')
-            print(e) 
-            
-    def bulk_insert(self,datafile, collection_name=""):
+            termcolor.cprint(
+                "Error inserting the entry:", "red", attrs=["bold"], end=" "
+            )
+            print(e)
+
+    def bulk_insert(self, datafile, collection_name=""):
         """
         Bulk insert data from a CSV, Excel, or JSON file into a MongoDB collection.
 
@@ -218,38 +253,40 @@ class Mongo_operation:
         ```python
         # If you want to save the data into existing collection
         my_object.bulk_insert('path/to/data.csv')
-        
+
         # If you want to save the data into new collection
         my_object.bulk_insert('path/to/data.csv', 'my_collection')
         ```
         """
         try:
-            self.path=datafile
-            
+            self.path = datafile
+
             # Configure the type of the file
-            if self.path.endswith('.csv'):
-                dataframe=pd.read_csv(self.path,encoding='utf-8')
+            if self.path.endswith(".csv"):
+                dataframe = pd.read_csv(self.path, encoding="utf-8")
 
             elif self.path.endswith(".xlsx"):
-                dataframe=pd.read_excel(self.path)
+                dataframe = pd.read_excel(self.path)
 
             elif self.path.endswith(".json"):
-                with open(self.path, 'r') as json_file:
+                with open(self.path, "r") as json_file:
                     datajson = json.load(json_file)
 
             if not self.path.endswith(".json"):
-                datajson=json.loads(dataframe.to_json(orient='records'))
-            
+                datajson = json.loads(dataframe.to_json(orient="records"))
+
             # Set the collection
-            if collection_name!="":
-                collection=self.create_collection(collection_name)
-                
+            if collection_name != "":
+                collection = self.create_collection(collection_name)
+
             # call the function to insert the data
             self.insert_data(datajson)
         except Exception as e:
-            termcolor.cprint("Error in insert the data:",'red',attrs=['bold'],end=' ')
+            termcolor.cprint(
+                "Error in insert the data:", "red", attrs=["bold"], end=" "
+            )
             print(e)
-            
+
     def find_data(self, key_value=""):
         """
         Retrieves data from the MongoDB collection based on the specified key-value pair.
@@ -265,47 +302,53 @@ class Mongo_operation:
         Raises:
         Exception: If there is an error during the data retrieval process, an exception is raised,
                    and an error message is printed.
-                   
+
         Example Usage:
         ```python
         # Find all the documents of the collection
         my_object.find_data()
-        
+
         # Find the documents based on key_value
         key_value={'name': 'abc'}
-        my_object.find_data(key_value)        
+        my_object.find_data(key_value)
         ```
         """
 
         try:
-            # Find all the documents 
+            # Find all the documents
             if key_value == "":
-                item_details=self.collection.find()
-            
+                item_details = self.collection.find()
+
             # Find the documents based on the key_value
             else:
-                item_details=self.collection.find(key_value)
-            
+                item_details = self.collection.find(key_value)
+
             # Store documents in list
-            item_list=[]
+            item_list = []
             for item in item_details:
                 item_list.append(item)
-            
+
             # If list contains at least one document
             if len(item_list) != 0:
-                flag=input("Do you want to print the data as a dataframe(y/n): ").lower()
-                if flag=='y':
-                    df=pd.DataFrame(item_list)
+                flag = input(
+                    "Do you want to print the data as a dataframe(y/n): "
+                ).lower()
+                if flag == "y":
+                    df = pd.DataFrame(item_list)
                     return df
                 return item_list
-            
+
             # If list does not contains any document
             else:
-                termcolor.cprint("There are no document in the collection or no document for key_value.", 'dark_grey', attrs=['bold'])
+                termcolor.cprint(
+                    "There are no document in the collection or no document for key_value.",
+                    "dark_grey",
+                    attrs=["bold"],
+                )
         except Exception as e:
-            termcolor.cprint("Error finding the data:","red", attrs=['bold'], end=' ')
-            print(e)     
-            
+            termcolor.cprint("Error finding the data:", "red", attrs=["bold"], end=" ")
+            print(e)
+
     def delete_data(self, key_value=""):
         """
         Deletes data from the MongoDB collection based on the specified key-value pair.
@@ -320,12 +363,12 @@ class Mongo_operation:
         Raises:
         Exception: If there is an error during the deletion process, an exception is raised,
                    and an error message is printed.
-                   
+
         Example Usage:
         ```python
         # For delete the entire data of collection
         my_object.delete_data()
-        
+
         # Delete the documents based on the key_value
         key_value={'age':38}
         my_object.delete_data(key_value)
@@ -334,44 +377,60 @@ class Mongo_operation:
 
         try:
             # Delete the entire data of collection
-            if key_value=="":
-                flag=input("It will delete entire data, Do you want to delete the data?(y/n): ").lower()
-                if flag=='y':
+            if key_value == "":
+                flag = input(
+                    "It will delete entire data, Do you want to delete the data?(y/n): "
+                ).lower()
+                if flag == "y":
                     self.collection.delete_many({})
-                    termcolor.cprint("All entry deleted",'magenta',attrs=['bold'])
+                    termcolor.cprint("All entry deleted", "magenta", attrs=["bold"])
                     return
 
                 else:
                     termcolor.cprint("Nothing deleted")
-                    return 
-                
+                    return
+
             # Delete the documents based on the key_value
             else:
                 # Check the documents based on the key value
                 item_list = list(self.collection.find(key_value))
-                if len(item_list)==0:
-                    termcolor.cprint("Entry doesn't exists of given key value.", 'dark_grey', attrs=['bold'])
+                if len(item_list) == 0:
+                    termcolor.cprint(
+                        "Entry doesn't exists of given key value.",
+                        "dark_grey",
+                        attrs=["bold"],
+                    )
                     return
-                
+
                 # Ask for delete single or multiple entries
-                flag=input("Do you want delete the one entry or mutiple entries?(one/many) ").lower()
+                flag = input(
+                    "Do you want delete the one entry or mutiple entries?(one/many) "
+                ).lower()
 
-                if flag=='one':
+                if flag == "one":
                     self.collection.delete_one(key_value)
-                    termcolor.cprint("Entry deleted successfully ","green", attrs=['bold'], end=' ')
+                    termcolor.cprint(
+                        "Entry deleted successfully ", "green", attrs=["bold"], end=" "
+                    )
 
-                elif flag=='many':
+                elif flag == "many":
                     self.collection.delete_many(key_value)
-                    termcolor.cprint("Multiple entries deleted successfully ","green", attrs=['bold'], end=' ')
+                    termcolor.cprint(
+                        "Multiple entries deleted successfully ",
+                        "green",
+                        attrs=["bold"],
+                        end=" ",
+                    )
                 else:
-                    termcolor.cprint("Incorrect option:", "red", attrs=['bold'], end=' ')
+                    termcolor.cprint(
+                        "Incorrect option:", "red", attrs=["bold"], end=" "
+                    )
                     print("choose either 'one' or 'many'")
 
         except Exception as e:
-            termcolor.cprint("Error deleting the data:","red", attrs=['bold'], end=' ')
+            termcolor.cprint("Error deleting the data:", "red", attrs=["bold"], end=" ")
             print(e)
-            
-            
+
     def update_data_entry(self, filter_criteria, update_data):
         """
         Updates data in the MongoDB collection based on the specified filter criteria.
@@ -386,7 +445,7 @@ class Mongo_operation:
         Raises:
         Exception: If there is an error during the update process, an exception is raised,
                    and an error message is printed.
-                   
+
         Example Usage:
         ```python
         filter_criteria = {'age': 28}
@@ -397,27 +456,39 @@ class Mongo_operation:
 
         try:
             # Retrieve documents based on the specified filter criteria
-            item_list=list(self.collection.find(filter_criteria))
-            
+            item_list = list(self.collection.find(filter_criteria))
+
             # Raise the error if there is no document based on filter_criteria
             if len(item_list) == 0:
                 raise Exception("Entry does not exist, can not update the data")
 
             # Ask to update single or multiple entries
-            flag=input("Do you want single entry update on multiple?(one/many) ").lower()
-            
-            if flag=='one':    
-                self.collection.update_one(filter_criteria, update_data)  
-                termcolor.cprint("Updated Successfully (one entry)...","green", attrs=['bold'], end=' ')
-            elif flag=='many':
+            flag = input(
+                "Do you want single entry update on multiple?(one/many) "
+            ).lower()
+
+            if flag == "one":
+                self.collection.update_one(filter_criteria, update_data)
+                termcolor.cprint(
+                    "Updated Successfully (one entry)...",
+                    "green",
+                    attrs=["bold"],
+                    end=" ",
+                )
+            elif flag == "many":
                 self.collection.update_many(filter_criteria, update_data)
-                termcolor.cprint("Updated Successfully (multiple entries)....","green", attrs=['bold'], end=' ')
+                termcolor.cprint(
+                    "Updated Successfully (multiple entries)....",
+                    "green",
+                    attrs=["bold"],
+                    end=" ",
+                )
             else:
                 raise Exception("Invalid input")
         except Exception as e:
-            termcolor.cprint("Error updating the data:","red", attrs=['bold'], end=' ')
-            print(e) 
-            
+            termcolor.cprint("Error updating the data:", "red", attrs=["bold"], end=" ")
+            print(e)
+
     # Helper function
     def convert_to_serializable(self, obj):
         """
@@ -426,7 +497,7 @@ class Mongo_operation:
         if isinstance(obj, ObjectId):
             return str(obj)
         return obj
-    
+
     def save_data(self):
         """
         Save data from the MongoDB collection to either a JSON or CSV file.
@@ -451,49 +522,52 @@ class Mongo_operation:
         my_object.save_data()
         ```
         """
-    
+
         try:
             # Retrieve data from the MongoDB collection
-            item_list=list(self.collection.find())
-            data=item_list
-            
+            item_list = list(self.collection.find())
+            data = item_list
+
             # Ask the user to save the type of the file
-            flag=input("Do you want to save the data as json file or csv file?(json/csv)").lower()
-            file_name=""
-            
+            flag = input(
+                "Do you want to save the data as json file or csv file?(json/csv)"
+            ).lower()
+            file_name = ""
+
             # Store the file as json format
-            if flag=='json':
-                json_file=input("Enter the filename: ")
-                serialized_data = json.dumps(data, default=self.convert_to_serializable, indent=2)
-                with open(json_file, 'w') as jsonfile:
+            if flag == "json":
+                json_file = input("Enter the filename: ")
+                serialized_data = json.dumps(
+                    data, default=self.convert_to_serializable, indent=2
+                )
+                with open(json_file, "w") as jsonfile:
                     jsonfile.write(serialized_data)
-                file_name=json_file
-                
+                file_name = json_file
+
             # Store the file as csv format
-            elif flag=='csv':
-                csv_file_name =input("Enter the filename: ")
-                df=pd.DataFrame(data)
+            elif flag == "csv":
+                csv_file_name = input("Enter the filename: ")
+                df = pd.DataFrame(data)
                 df.to_csv(csv_file_name)
-                file_name=csv_file_name
-                
+                file_name = csv_file_name
+
             else:
-                termcolor.cprint("Incorrect option:",'red',attrs=['bold'],end=' ')
+                termcolor.cprint("Incorrect option:", "red", attrs=["bold"], end=" ")
                 print("choose either 'json' or 'csv'")
                 return
-            
+
             # Check if the file is created or not
             if os.path.exists(file_name):
-                    termcolor.cprint("File:", 'green', attrs=['bold'], end=' ')
-                    termcolor.cprint(f"'{file_name}'", 'blue', attrs=['bold'], end=' ')
-                    termcolor.cprint("saved successfully....", 'green', attrs=['bold'])
+                termcolor.cprint("File:", "green", attrs=["bold"], end=" ")
+                termcolor.cprint(f"'{file_name}'", "blue", attrs=["bold"], end=" ")
+                termcolor.cprint("saved successfully....", "green", attrs=["bold"])
             else:
                 raise Exception("File path is not exist")
-                
+
         except Exception as e:
-            termcolor.cprint("Error saving data:",'red',attrs=['bold'],end=' ')
+            termcolor.cprint("Error saving data:", "red", attrs=["bold"], end=" ")
             print(e)
-            
-            
+
     def close_mongo_client(self):
         """
         Closes the MongoDB client connection.
@@ -508,21 +582,31 @@ class Mongo_operation:
 
         try:
             # Check the status of the MongoDB client connection
-            result=self.client.admin.command('ismaster')
-            primary=result.get('ismaster')==True
-            secondary=result.get('ismaster')==False
-            
+            result = self.client.admin.command("ismaster")
+            primary = result.get("ismaster") == True
+            secondary = result.get("ismaster") == False
+
             # Close the MongoDB client if it is open
             if primary or secondary or self.client:
                 self.client.close()
-                self.is_closed=True
-                termcolor.cprint("MongoDB client closed successfully..",'magenta',attrs=['bold'])
+                self.is_closed = True
+                termcolor.cprint(
+                    "MongoDB client closed successfully..", "magenta", attrs=["bold"]
+                )
             else:
-                termcolor.cprint("MongoDB client is already closed or not provided.",'dark_grey',attrs=['bold'])
+                termcolor.cprint(
+                    "MongoDB client is already closed or not provided.",
+                    "dark_grey",
+                    attrs=["bold"],
+                )
 
         except Exception as e:
-            if str(e)=='Cannot use MongoClient after close':
-                termcolor.cprint("MongoDB client is already closed.",'dark_grey',attrs=['bold'])
+            if str(e) == "Cannot use MongoClient after close":
+                termcolor.cprint(
+                    "MongoDB client is already closed.", "dark_grey", attrs=["bold"]
+                )
             else:
-                termcolor.cprint("Error closing MongoDB client:","red", attrs=['bold'], end=' ')
-                print(e) 
+                termcolor.cprint(
+                    "Error closing MongoDB client:", "red", attrs=["bold"], end=" "
+                )
+                print(e)
